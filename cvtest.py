@@ -10,10 +10,10 @@ window_name2 = 'window'
 
 
 def binarization(frame):
-    if len(sys.argv) > 1:
-        threshold = int(sys.argv[1])
+    if len(sys.argv) > 2:
+        threshold = int(sys.argv[2])
     else:
-        threshold = 100
+        threshold = 120
 
     # Convert image to gray and blur it
     gray = cv.cvtColor(frame, cv.COLOR_BGR2GRAY)
@@ -46,15 +46,20 @@ def ammo_area(frame, cap_file):
 
 
 def main():
-    cap_file = cv.VideoCapture(file_path)
+    if len(sys.argv) == 3:
+        filename = sys.argv[1]
+    else:
+        print('Usage: [filename], [threshold]')
+        sys.exit()
+
+    cap_file = cv.VideoCapture(filename)
 
     if not cap_file.isOpened():
         sys.exit()
 
-
     while True:
         # Sleep to show at normal speed
-        sleeptime = 1/30
+        sleeptime = 1/10
         sleep(sleeptime)
 
         # Read frame
@@ -66,12 +71,13 @@ def main():
         trimmed_frame = ammo_area(binarized_frame, cap_file)
 
         # Show in a window
-        cv.imshow(window_name, frame)
+        cv.imshow(window_name, binarized_frame)
         cv.imshow(window_name2, trimmed_frame)
 
         # Push q to quit
         if cv.waitKey(delay) & 0xFF == ord('q'):
             break
     cv.destroyWindow(window_name)
+
 
 main()
