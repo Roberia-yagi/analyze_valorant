@@ -3,10 +3,7 @@ import numpy as np
 import sys
 
 def binarization(frame):
-    if len(sys.argv) > 2:
-        threshold = int(sys.argv[2])
-    else:
-        threshold = 120
+    threshold = 90
 
     # Convert image to gray and blur it
     gray = cv.cvtColor(frame, cv.COLOR_BGR2GRAY)
@@ -15,7 +12,7 @@ def binarization(frame):
     # Detect edges using Canny
     canny_output = cv.Canny(blur, threshold, threshold * 2)
     # Find contours
-    contours, hierarchy = cv.findContours(
+    _, contours, hierarchy = cv.findContours(
         canny_output, cv.RETR_TREE, cv.CHAIN_APPROX_SIMPLE)
     # Draw contours
     drawing = np.zeros(
