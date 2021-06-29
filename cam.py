@@ -5,7 +5,6 @@ import processing as process
 
 window_name = 'frame'
 
-
 def main():
     cap_file = cv.VideoCapture(0)
     if not cap_file.isOpened():
@@ -20,7 +19,7 @@ def main():
 
         windowsize = (800, 600)
         frame = cv.resize(frame, windowsize)
-        binarized_frame = process.binarization(frame)
+        binarized_frame = process.cam_binarization(frame)
 
         cv.imshow(window_name, binarized_frame)
 
@@ -31,6 +30,5 @@ def main():
 
     capture.release()
     cv.destroyWindow(window_name)
-
 
 main()
