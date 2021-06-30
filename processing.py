@@ -39,3 +39,25 @@ def ammo_area(frame, cap_file):
     trimmed_frame = frame[ymin:ymax, xmin:xmax]
 
     return trimmed_frame
+
+def cam_binarization(frame):
+    threshold = 90
+
+    # Convert image to gray and blur it
+    gray = cv.cvtColor(frame, cv.COLOR_BGR2GRAY)
+    blur = cv.blur(gray, (3, 3))
+
+    # Detect edges using Canny
+    canny_output = cv.Canny(blur, threshold, threshold * 2)
+    # Find contours
+    _, contours, hierarchy = cv.findContours(
+        canny_output, cv.RETR_TREE, cv.CHAIN_APPROX_SIMPLE)
+    # Draw contours
+    out = np.zeros(
+        (canny_output.shape[0], canny_output.shape[1], 3), dtype=np.uint8)
+    for i in range(len(contours)):
+        color = (255, 255, 255)
+        cv.drawContours(out, contours, i, color,
+                        2, cv.LINE_8, hierarchy, 0)
+
+    return out
